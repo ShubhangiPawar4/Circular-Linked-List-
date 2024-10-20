@@ -1,0 +1,195 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *s = NULL;
+
+struct node* Insert_Beg(struct node *top) {
+    struct node *r = (struct node*)malloc(sizeof(struct node));
+    if (r == NULL) {
+        printf("Memory allocation failed\n");
+        return top;
+    }
+    printf("Enter data: ");
+    scanf("%d", &r->data);
+    
+    if (top == NULL) {
+        r->next = r;
+        return r;
+    }
+    
+    struct node *t = top;
+    while (t->next != top) {
+        t = t->next;
+    }
+    
+    t->next = r;
+    r->next = top;
+    
+    return r;
+}
+
+struct node* Insert_End(struct node *top) {
+    struct node *r = (struct node*)malloc(sizeof(struct node));
+    if (r == NULL) {
+        printf("Memory allocation failed\n");
+        return top;
+    }
+    printf("Enter data: ");
+    scanf("%d", &r->data);
+    
+    if (top == NULL) {
+        r->next = r;
+        return r;
+    }
+    
+    struct node *t = top;
+    while (t->next != top) {
+        t = t->next;
+    }
+    
+    t->next = r;
+    r->next = top;
+
+    printf("Current list: ");
+    struct node *temp = top;
+    do {
+        printf("%d\t", temp->data);
+        temp = temp->next;
+    } while (temp != top);
+    printf("\n");
+    
+    return top;
+}
+
+struct node* Delete_Beg(struct node *top) {
+    if (top == NULL) {
+        printf("List is empty!\n");
+        return NULL;
+    }
+    
+    if (top->next == top) {
+        free(top);
+        return NULL;
+    }
+    
+    struct node *r = top;
+    struct node *last = top;
+    
+    while (last->next != top) {
+        last = last->next;
+    }
+    
+    last->next = top->next;
+    top = top->next;
+    free(r);
+
+    printf("Current list: ");
+    struct node *t = top;
+    do {
+        printf("%d\t", t->data);
+        t = t->next;
+    } while (t != top);
+    printf("\n");
+
+    return top;
+}
+
+struct node* Delete_End(struct node *top) {
+    if (top == NULL) {
+        printf("List is empty!\n");
+        return NULL;
+    }
+    
+    if (top->next == top) {
+        free(top);
+        return NULL;
+    }
+    
+    struct node *r = top;
+    struct node *t = NULL;
+    
+    while (r->next != top) {
+        t = r;
+        r = r->next;
+    }
+    
+    t->next = top;
+    free(r);
+
+    printf("Current list: ");
+    struct node *u = top;
+    do {
+        printf("%d\t", u->data);
+        u = u->next;
+    } while (u != top);
+    printf("\n");
+
+    return top;
+}
+
+int main() {
+    struct node *p, *q;
+    char ch;
+    int op;
+    
+    p = (struct node*)malloc(sizeof(struct node));
+    if (p == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
+    printf("Enter data: ");
+    scanf("%d", &p->data);
+    
+    s = p;
+    p->next = s;
+    
+    do {
+        q = (struct node*)malloc(sizeof(struct node));
+        if (q == NULL) {
+            printf("Memory allocation failed\n");
+            return 1;
+        }
+        printf("Enter data: ");
+        scanf("%d", &q->data);
+        
+        p->next = q;
+        q->next = s;
+        p = q;
+
+        printf("Enter 'y' to continue: ");
+        ch = getchar();  // Using getchar() instead of getch()
+        getchar();  // To consume newline left by scanf
+    } while (ch == 'y' || ch == 'Y');
+    
+    printf("Enter '1' for Insert_Beg, '2' for Insert_End, '3' for Delete_Beg, '4' for Delete_End, '5' for Exit: ");
+    scanf("%d", &op);
+    
+    while (op != 5) {
+        switch (op) {
+            case 1:
+                s = Insert_Beg(s);
+                break;
+            case 2:
+                s = Insert_End(s);
+                break;
+            case 3:
+                s = Delete_Beg(s);
+                break;
+            case 4:
+                s = Delete_End(s);
+                break;
+            default:
+                printf("Wrong input\n");
+        }
+        
+        printf("\nEnter your next operation: ");
+        scanf("%d", &op);
+    }
+    
+    return 0;
+}
